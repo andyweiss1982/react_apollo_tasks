@@ -1,0 +1,16 @@
+{
+  "name": "react_gql_parcel",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "devDependencies": {
+    "concurrently": "^5.2.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"cd frontend && yarn dev\" \"cd backend && yarn dev\""
+  }
+}
