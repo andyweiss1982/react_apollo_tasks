@@ -3,7 +3,7 @@ import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import Task from "./Task";
 
-const TASKS_QUERY = gql`
+export const TASKS_QUERY = gql`
   query Tasks {
     tasks {
       id

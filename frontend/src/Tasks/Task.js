@@ -1,6 +1,7 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
+import { TASKS_QUERY } from "./List";
 
 const UPDATE_TASK_QUERY = gql`
   mutation UpdateTask($id: ID!) {
@@ -54,7 +55,10 @@ const Task = ({ id, description, completed, dueDate }) => {
           className="delete"
           onClick={() => {
             if (confirm("Are you sure?")) {
-              deleteTask({ variables: { id }, refetchQueries: ["Tasks"] });
+              deleteTask({
+                variables: { id },
+                refetchQueries: [{ query: TASKS_QUERY }],
+              });
             }
           }}
         >
