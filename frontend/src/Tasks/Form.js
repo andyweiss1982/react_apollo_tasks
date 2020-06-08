@@ -1,17 +1,7 @@
 import React, { useState } from "react";
-import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
-
-const CREATE_TASK_MUTATION = gql`
-  mutation CreateTask($description: String!, $dueDate: String) {
-    createTask(description: $description, dueDate: $dueDate) {
-      id
-      description
-      completed
-      dueDate
-    }
-  }
-`;
+import { TASKS_QUERY } from "./graphql-queries";
+import { CREATE_TASK_MUTATION } from "./graphql-mutations";
 
 const Form = () => {
   const emptyFormData = { description: "", dueDate: "" };
@@ -23,7 +13,7 @@ const Form = () => {
     for (let key in variables) {
       if (!variables[key]) delete variables[key];
     }
-    createTask({ variables, refetchQueries: ["Tasks"] });
+    createTask({ variables, refetchQueries: [{ query: TASKS_QUERY }] });
     setFormData(emptyFormData);
   };
   return (

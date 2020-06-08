@@ -1,18 +1,7 @@
 import React from "react";
-import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import Task from "./Task";
-
-export const TASKS_QUERY = gql`
-  query Tasks {
-    tasks {
-      id
-      description
-      completed
-      dueDate
-    }
-  }
-`;
+import { TASKS_QUERY } from "./graphql-queries";
 
 const List = () => {
   const { data } = useQuery(TASKS_QUERY);
