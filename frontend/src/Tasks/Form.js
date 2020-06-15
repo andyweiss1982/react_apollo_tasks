@@ -6,14 +6,22 @@ import { CREATE_TASK_MUTATION } from "./graphql-mutations";
 const Form = () => {
   const emptyFormData = { description: "", dueDate: "" };
   const [formData, setFormData] = useState(emptyFormData);
-  const [createTask] = useMutation(CREATE_TASK_MUTATION);
+  const [createTask] = useMutation(CREATE_TASK_MUTATION, {
+    update(cache, { data: { createTask } }) {
+      const { tasks } = cache.readQuery({ query: TASKS_QUERY });
+      cache.writeQuery({
+        query: TASKS_QUERY,
+        data: { tasks: [createTask, ...tasks] },
+      });
+    },
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
     const variables = { ...formData };
     for (let key in variables) {
       if (!variables[key]) delete variables[key];
     }
-    createTask({ variables, refetchQueries: [{ query: TASKS_QUERY }] });
+    createTask({ variables });
     setFormData(emptyFormData);
   };
   return (

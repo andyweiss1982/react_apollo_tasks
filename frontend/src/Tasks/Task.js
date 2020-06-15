@@ -8,7 +8,15 @@ import {
 
 const Task = ({ id, description, completed, dueDate }) => {
   const [updateTask] = useMutation(UPDATE_TASK_MUTATION);
-  const [deleteTask] = useMutation(DELETE_TASK_MUTATION);
+  const [deleteTask] = useMutation(DELETE_TASK_MUTATION, {
+    update(cache, { data: { deleteTask } }) {
+      const { tasks } = cache.readQuery({ query: TASKS_QUERY });
+      cache.writeQuery({
+        query: TASKS_QUERY,
+        data: { tasks: tasks.filter((task) => task.id !== deleteTask.id) },
+      });
+    },
+  });
   const today = new Date().toISOString().split("T")[0];
   return (
     <li>
@@ -36,10 +44,7 @@ const Task = ({ id, description, completed, dueDate }) => {
           className="delete"
           onClick={() => {
             if (confirm("Are you sure?")) {
-              deleteTask({
-                variables: { id },
-                refetchQueries: [{ query: TASKS_QUERY }],
-              });
+              deleteTask({ variables: { id } });
             }
           }}
         >
