@@ -21,7 +21,19 @@ const Form = () => {
     for (let key in variables) {
       if (!variables[key]) delete variables[key];
     }
-    createTask({ variables });
+    createTask({
+      variables,
+      optimisticResponse: {
+        __typename: "Mutation",
+        createTask: {
+          description: formData.description,
+          dueDate: formData.dueDate || null,
+          id: String(Math.random()),
+          completed: false,
+          __typename: "Task",
+        },
+      },
+    });
     setFormData(emptyFormData);
   };
   return (

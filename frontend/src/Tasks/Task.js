@@ -36,7 +36,21 @@ const Task = ({ id, description, completed, dueDate }) => {
       <span className="buttons">
         <button
           className="update"
-          onClick={() => updateTask({ variables: { id } })}
+          onClick={() =>
+            updateTask({
+              variables: { id },
+              optimisticResponse: {
+                __typename: "Mutation",
+                updateTask: {
+                  description,
+                  dueDate,
+                  id,
+                  completed: !completed,
+                  __typename: "Task",
+                },
+              },
+            })
+          }
         >
           {completed ? "Mark Incomplete" : "Mark Complete"}
         </button>
@@ -44,7 +58,19 @@ const Task = ({ id, description, completed, dueDate }) => {
           className="delete"
           onClick={() => {
             if (confirm("Are you sure?")) {
-              deleteTask({ variables: { id } });
+              deleteTask({
+                variables: { id },
+                optimisticResponse: {
+                  __typename: "Mutation",
+                  deleteTask: {
+                    description,
+                    dueDate,
+                    id,
+                    completed,
+                    __typename: "Task",
+                  },
+                },
+              });
             }
           }}
         >
